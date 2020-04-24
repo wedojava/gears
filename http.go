@@ -27,9 +27,12 @@ func HttpGetBody(url string) (string, error) {
 
 // HttpGetTitleViaTwitterJS get post title via twitter share javascripts' json data
 func HttpGetTitleViaTwitterJS(rawBody string) string {
-	// var reTitle = regexp.MustCompile(`(?m)<title(.*?){0,1}>(?P<title>.*?)</title>`)
-	var reTitle = regexp.MustCompile(`(?m)<meta name="twitter:title" content="(?P<title>.*?)"`)
-	title := reTitle.FindStringSubmatch(rawBody)[1]
+	var a = regexp.MustCompile(`(?m)<meta name="twitter:title" content="(?P<title>.*?)"`)
+	return a.FindStringSubmatch(rawBody)[1]
+}
 
-	return title
+// HttpGetSiteViaTwitterJS get post site via twitter share javascripts' json data
+func HttpGetSiteViaTwitterJS(rawBody string) string {
+	var a = regexp.MustCompile(`(?m)<meta name="twitter:site" content="(?P<site>.*?)"`)
+	return a.FindStringSubmatch(rawBody)[1]
 }
