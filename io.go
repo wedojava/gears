@@ -17,11 +17,22 @@ func PathGenAsDate() (s string, err error) {
 	if !Exists(s) {
 		err = os.MkdirAll(s, 0755)
 		if err != nil {
+			fmt.Println("[-] gears.PathGenAsDate() error!")
 			log.Fatal(err)
 			return
 		}
 	}
 	return
+}
+
+func MakeDirAll(path string) {
+	if !Exists(path) {
+		err := os.MkdirAll(path, 0755)
+		if err != nil {
+			fmt.Println("[-] gears.MakeDirAll() error")
+			log.Fatal(err)
+		}
+	}
 }
 
 func RemoveFolder(folderPath string) error {
@@ -40,6 +51,7 @@ func RemoveRoutine(root string) error {
 	b := fmt.Sprintf("%02d%02d", a.Month(), a.Day())
 	err := RemoveFolder(filepath.Join(root, b))
 	if err != nil {
+		fmt.Println("[-] gears.RemoveRoutine() error")
 		return err
 	}
 
@@ -64,6 +76,7 @@ func Exists(path string) bool {
 func FileCodeDetector(filename string) string {
 	f, err := os.Open(filename)
 	if err != nil {
+		fmt.Println("[-] gears.FileCodeDetector() error")
 		log.Fatal(err)
 	}
 	defer f.Close()
