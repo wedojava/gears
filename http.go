@@ -36,3 +36,8 @@ func HttpGetSiteViaTwitterJS(rawBody string) string {
 	var a = regexp.MustCompile(`(?m)<meta name="twitter:site" content="(?P<site>.*?)"`)
 	return a.FindStringSubmatch(rawBody)[1]
 }
+
+func HttpGetDateViaMeta(rawBody string) string {
+	var a = regexp.MustCompile(`(?m)<meta name="parsely-pub-date" content="(?P<date>.*?)".*?/>`)
+	return a.FindStringSubmatch(rawBody)[1]
+}
