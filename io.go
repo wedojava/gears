@@ -1,11 +1,13 @@
 package gears
 
 import (
+	"bufio"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 )
 
@@ -84,4 +86,14 @@ func FileCodeDetector(filename string) string {
 	fdetect := StrDetector(string(fd))
 
 	return fdetect
+}
+
+// GetInput get string from os.Stdin filted \r and \n
+func GetInput() string {
+	reader := bufio.NewReader(os.Stdin)
+	input, _ := reader.ReadString('\n')
+	// convert CRLF to LF
+	input = strings.Replace(input, "\n", "", -1)
+	input = strings.Replace(input, "\r", "", -1)
+	return input
 }
