@@ -37,21 +37,10 @@ func MakeDirAll(path string) {
 	}
 }
 
-func RemoveFolder(folderPath string) error {
-	if !Exists(folderPath) {
-		return nil
-	}
-	err := os.RemoveAll(folderPath)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func RemoveRoutine(root string) error {
+func FileRemoveRoutine(root string) error {
 	a := time.Now().AddDate(0, 0, -2)
-	b := fmt.Sprintf("%02d%02d", a.Month(), a.Day())
-	err := RemoveFolder(filepath.Join(root, b))
+	b := fmt.Sprintf("[%02d%02d]", a.Month(), a.Day())
+	err := os.Remove(filepath.Join(root, b))
 	if err != nil {
 		fmt.Println("[-] gears.RemoveRoutine() error")
 		return err
@@ -60,16 +49,22 @@ func RemoveRoutine(root string) error {
 	return nil
 }
 
+func RemoveRoutine(root string) error {
+	a := time.Now().AddDate(0, 0, -2)
+	b := fmt.Sprintf("%02d%02d", a.Month(), a.Day())
+	err := os.RemoveAll(filepath.Join(root, b))
+	if err != nil {
+		fmt.Println("[-] gears.RemoveRoutine() error")
+		return err
+	}
+
+	return nil
+}
+
+// Exists judge the path, return true while exist, whatever it's a file or folder
 func Exists(path string) bool {
 	_, err := os.Stat(path) //os.Stat获取文件信息
-	//if err != nil && os.IsNotExist(err) {
-	//	return false
-	//}
-	//return true
-	if err != nil {
-		if os.IsExist(err) {
-			return true
-		}
+	if err != nil && os.IsNotExist(err) {
 		return false
 	}
 	return true
@@ -96,4 +91,29 @@ func GetInput() string {
 	input = strings.Replace(input, "\n", "", -1)
 	input = strings.Replace(input, "\r", "", -1)
 	return input
+}
+
+// GetPrefixedFiles return a files slice from walk over the folder path and filtered by prefix string.
+func GetPrefixedFiles(folder, prefix string) (files []string, err error) {
+	if !Exists(folder) {
+		fmt.Printf("\n[-] Folder's not exist!\n%s\n", folder)
+		return
+	}
+	err = filepath.Walk(folder, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			fmt.Printf("prevent panic by handling failure accessing a path %q: %v\n", path, err)
+			return err
+		}
+		if !info.IsDir() && strings.HasPrefix(info.Name(), prefix) {
+			fmt.Printf("visited file or dir: %q\n", path)
+			files = append(files, path)
+		}
+		return nil
+	})
+	if err != nil {
+		fmt.Printf("error walking the path %q: %v\n", folder, err)
+		return
+	}
+
+	return
 }
