@@ -45,3 +45,8 @@ func HttpGetDateViaMeta(rawBody string) string {
 	var a = regexp.MustCompile(`(?m)<meta name="parsely-pub-date" content="(?P<date>.*?)".*?/>`)
 	return a.FindStringSubmatch(rawBody)[1]
 }
+
+func HttpGetDomain(url string) string {
+	var a = regexp.MustCompile(`(?m)https?://(\w+.\w+.\w+)/`)
+	return a.FindStringSubmatch(url)[1]
+}
