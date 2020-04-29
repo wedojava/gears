@@ -8,19 +8,23 @@ import (
 	"github.com/pkg/errors"
 )
 
-func HttpGetBody(url string) (string, error) {
-	// Request the HTML page
+// HttpGetBody request url to get Html Body, if get error occur it'll try n times.
+func HttpGetBody(url string, n int) (string, error) {
 	raw, err := http.Get(url)
+	for err != nil && n > 0 {
+		raw, err = http.Get(url)
+		n--
+	}
 	if err != nil {
-		return "", errors.Wrapf(err, "[-] gears.HttpGetBody()>Get() Error!")
+		return "", errors.Wrapf(err, "\n[-] gears.HttpGetBody()>Get() try times, but error occur still!\n[-] ")
 	}
 	rawBody, err := ioutil.ReadAll(raw.Body)
 	defer raw.Body.Close()
 	if err != nil {
-		return "", errors.Wrap(err, "[-] gears.HttpGetBody()>ReadAll() Error!")
+		return "", errors.Wrap(err, "\n[-] gears.HttpGetBody()>ReadAll() Error!\n[-] ")
 	}
 	if raw.StatusCode != 200 {
-		return "", errors.Wrap(err, "[-] gears.HttpGetBody()>Get() Error! Message: Cannot open the url.")
+		return "", errors.Wrap(err, "\n[-] gears.HttpGetBody()>Get() Error! Message: Cannot open the url.\n[-] ")
 	}
 	return string(rawBody), nil
 }
