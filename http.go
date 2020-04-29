@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"regexp"
+	"time"
 
 	"github.com/pkg/errors"
 )
@@ -13,6 +14,7 @@ func HttpGetBody(url string, n int) (string, error) {
 	raw, err := http.Get(url)
 	for err != nil && n > 0 {
 		raw, err = http.Get(url)
+		time.Sleep(time.Minute * 1)
 		n--
 	}
 	if err != nil {
