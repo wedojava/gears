@@ -34,21 +34,51 @@ func HttpGetBody(url string, n int) (string, error) {
 // HttpGetTitleViaTwitterJS get post title via twitter share javascripts' json data
 func HttpGetTitleViaTwitterJS(rawBody string) string {
 	var a = regexp.MustCompile(`(?m)<meta name="twitter:title" content="(?P<title>.*?)"`)
-	return a.FindStringSubmatch(rawBody)[1]
+	rt := a.FindStringSubmatch(rawBody)
+	if rt != nil {
+		return rt[1]
+	} else {
+		return ""
+	}
 }
 
 // HttpGetSiteViaTwitterJS get post site via twitter share javascripts' json data
 func HttpGetSiteViaTwitterJS(rawBody string) string {
 	var a = regexp.MustCompile(`(?m)<meta name="twitter:site" content="(?P<site>.*?)"`)
-	return a.FindStringSubmatch(rawBody)[1]
+	rt := a.FindStringSubmatch(rawBody)
+	if rt != nil {
+		return rt[1]
+	} else {
+		return ""
+	}
 }
 
 func HttpGetDateViaMeta(rawBody string) string {
 	var a = regexp.MustCompile(`(?m)<meta name="parsely-pub-date" content="(?P<date>.*?)".*?/>`)
-	return a.FindStringSubmatch(rawBody)[1]
+	rt := a.FindStringSubmatch(rawBody)
+	if rt != nil {
+		return rt[1]
+	} else {
+		return ""
+	}
+}
+
+func HttpGetDateByHeader(rawBody string) string {
+	var a = regexp.MustCompile(`(?m){"dateModified": "(?P<Datetime>.*?)",`)
+	rt := a.FindStringSubmatch(rawBody)
+	if rt != nil {
+		return rt[1]
+	} else {
+		return ""
+	}
 }
 
 func HttpGetDomain(url string) string {
 	var a = regexp.MustCompile(`(?m)https?://(\w+.\w+.\w+)/`)
-	return a.FindStringSubmatch(url)[1]
+	rt := a.FindStringSubmatch(url)
+	if rt != nil {
+		return rt[1]
+	} else {
+		return ""
+	}
 }
