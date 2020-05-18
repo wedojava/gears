@@ -64,7 +64,7 @@ func HttpGetDateViaMeta(rawBody string) string {
 }
 
 func HttpGetDateByHeader(rawBody string) string {
-	var a = regexp.MustCompile(`(?m){"dateModified": "(?P<Datetime>.*?)",`)
+	var a = regexp.MustCompile(`(?m){"dateModified":\s*?"(?P<Datetime>.*?)",`)
 	rt := a.FindStringSubmatch(rawBody)
 	if rt != nil {
 		return rt[1]
