@@ -2,11 +2,12 @@ package gears
 
 import (
 	"fmt"
+	"log"
+
 	"github.com/axgle/mahonia"
 	chardet2 "github.com/chennqqi/chardet"
 	mapset "github.com/deckarep/golang-set"
 	"github.com/gogs/chardet"
-	"log"
 )
 
 func PrintSlice(x []string) {
@@ -26,13 +27,16 @@ func StrSliceDeDupl(items []string) []string {
 	return result
 }
 
-func ConvertToUtf8(src string, srcCode string, tagCode string) string {
+func ConvertToUtf8(src *string, srcCode string, tagCode string) error {
 	srcCoder := mahonia.NewDecoder(srcCode)
-	srcResult := srcCoder.ConvertString(src)
+	srcResult := srcCoder.ConvertString(*src)
 	tagCoder := mahonia.NewDecoder(tagCode)
-	_, cdata, _ := tagCoder.Translate([]byte(srcResult), true)
-	result := string(cdata)
-	return result
+	_, cdata, err := tagCoder.Translate([]byte(srcResult), true)
+	if err != nil {
+		return err
+	}
+	*src = string(cdata)
+	return nil
 }
 
 func StrDetector2(s string) string {
