@@ -3,6 +3,8 @@ package gears
 import (
 	"fmt"
 	"log"
+	"regexp"
+	"strings"
 
 	"github.com/axgle/mahonia"
 	chardet2 "github.com/chennqqi/chardet"
@@ -12,6 +14,23 @@ import (
 
 func PrintSlice(x []string) {
 	fmt.Printf("len=%d cap=%d slice=%v\n", len(x), cap(x), x)
+}
+
+func RmIllegalChar(s *string) {
+	var re = regexp.MustCompile(`[\/:*?"<>|]`)
+	*s = re.ReplaceAllString(*s, "")
+}
+
+func ReplaceIllegalChar(s *string) {
+	*s = strings.ReplaceAll(*s, "\\", "、")
+	*s = strings.ReplaceAll(*s, "/", "／")
+	*s = strings.ReplaceAll(*s, "|", "｜")
+	*s = strings.ReplaceAll(*s, "?", "？")
+	*s = strings.ReplaceAll(*s, ":", "：")
+	*s = strings.ReplaceAll(*s, "*", "＊")
+	*s = strings.ReplaceAll(*s, "<", "《")
+	*s = strings.ReplaceAll(*s, ">", "》")
+	*s = strings.ReplaceAll(*s, "\"", "“")
 }
 
 // StrSliceDeDupl is used for string slice deduplication
