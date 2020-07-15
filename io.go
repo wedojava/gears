@@ -105,7 +105,6 @@ func GetUnPrefixedFiles(folder, prefix string) (files []string, err error) {
 			return err
 		}
 		if !info.IsDir() && !strings.HasPrefix(info.Name(), prefix) {
-			fmt.Printf("Deal with file or dir: %q\n", path)
 			files = append(files, path)
 		}
 		return nil
@@ -130,7 +129,6 @@ func GetPrefixedFiles(folder, prefix string) (files []string, err error) {
 			return err
 		}
 		if !info.IsDir() && strings.HasPrefix(info.Name(), prefix) {
-			fmt.Printf("Deal with file or dir: %q\n", path)
 			files = append(files, path)
 		}
 		return nil
