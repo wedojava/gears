@@ -41,6 +41,13 @@ func TestExists(t *testing.T) {
 	})
 }
 
+func TestGetUnPrefixedFiles(t *testing.T) {
+	t.Run("test get filelist has prefix [04.23]", func(t *testing.T) {
+		got, _ := GetPrefixedFiles("./test/", "[04.25]")
+		want := []string{"test/[04.25][0323H]test.txt"}
+		checkStrSlices(t, got, want)
+	})
+}
 func TestGetPrefixedFiles(t *testing.T) {
 	t.Run("test get filelist has prefix [04.25]", func(t *testing.T) {
 		got, _ := GetPrefixedFiles("./test/", "[04.25]")

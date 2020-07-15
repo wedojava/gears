@@ -93,6 +93,31 @@ func GetInput() string {
 	return input
 }
 
+// GetUnPrefixedFiles return a files slice from walk over the folder path and filtered by without prefix string.
+func GetUnPrefixedFiles(folder, prefix string) (files []string, err error) {
+	if !Exists(folder) {
+		fmt.Printf("\n[-] Folder's not exist!\n%s\n", folder)
+		return
+	}
+	err = filepath.Walk(folder, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			fmt.Printf("prevent panic by handling failure accessing a path %q: %v\n", path, err)
+			return err
+		}
+		if !info.IsDir() && !strings.HasPrefix(info.Name(), prefix) {
+			fmt.Printf("Deal with file or dir: %q\n", path)
+			files = append(files, path)
+		}
+		return nil
+	})
+	if err != nil {
+		fmt.Printf("error walking the path %q: %v\n", folder, err)
+		return
+	}
+
+	return
+}
+
 // GetPrefixedFiles return a files slice from walk over the folder path and filtered by prefix string.
 func GetPrefixedFiles(folder, prefix string) (files []string, err error) {
 	if !Exists(folder) {
